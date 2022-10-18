@@ -1,15 +1,11 @@
 ---
-title: "TP4"
-author: "Luca Mazzarello"
-date: '2022-10-05'
-output: html_document
+title: "TP4_Pardo_Mazzarello"
+author: "Ignacio Pardo & Luca Mazzarello"
+date: "`r Sys.Date()`"
+output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Consigna 1
+## 1.
 
 a)  $\mu$: concentración **media** arsenico (ppb) en pollos del proveedor A
 
@@ -23,23 +19,25 @@ e)  $T = \frac{\overline{X}_n - 80 }{\sqrt{\frac{16}{n}}}$ y **bajo** $H_0$ sabe
 
 f)  $\mathcal {R}$ = {$\mathcal {T > z_{\alpha}}= 1.281552$}
 
-## Consigna 2
+## 2.
 
 a)  
 
 ```{r}
+n = 5
 set.seed(44512364) 
-concentraciones = c(rnorm(5,80,4))
-(mean(concentraciones) - 80)/sqrt(16/5)
+concentraciones = rnorm(5,80,4)
+(mean(concentraciones) - 80) / sqrt(16/n)
+(mean(concentraciones) - 80) / sqrt(16/n) < 1.281552
 ```
 
 b)  Segun el test planteado en el ejercicio 1, no rechazariamos $H_0$ dado que el valor es menor a $1.281552$
 
 c)  Dado el contexto, no puedo asegurarme de que puedo aceptar $H_0$ si no que la informacion conseguida no es suficiente como para rechazar la hipotesis nula. Es decir, no rechazo $H_0$
 
-d)  No
+d)  No se cancela la relación con el proovedor.
 
-## Consigna 3
+## 3.
 
 ```{r}
 estadistico = function(a){
@@ -49,25 +47,36 @@ estadistico = function(a){
 estadistico(concentraciones)
 ```
 
-## Consigna 4
+## 4.
 
 ```{r}
 Nrep = 10000
 muchos_estadisticos = replicate(Nrep,estadistico(rnorm(5,80,4)))
-mean(mean(muchos_estadisticos > 1.281552))
+mean(muchos_estadisticos > 1.281552)
 ```
 
 A partir de los resultados podemos decir que en el diez porciento de las veces rechazo $H_0$ ya que solo el noventa porciento de las muestras satisface la hipotesis nula, es decir, $T > z_{0.1004} = 1.281552$
 
-## Consigna 5
+## 5.
 
 ```{r}
 hist(muchos_estadisticos,probability = TRUE)
 curve(dnorm(x, mean=0, sd=1), 
       col="darkblue", add=TRUE)
 ```
+
 a)  Podemos observar que el promedio se concentra en 0 (coincide con el hecho de tener una distribucion $N(0,1)$)
 
-b) Es de esperarse por el Teorema Central del Limite ya que trabajamos con un valor de "n" grande.
+b)  Es de esperarse por el Teorema Central del Limite ya que trabajamos con un valor de "n" grande.
 
-## Consigna 6
+## 6.
+
+El valor se debería aproximar al nivel $alpha = 0.1$
+
+```{r}
+mean(muchos_estadisticos > 1.281552)
+```
+
+Efectivamente el valor obtenido aproxima $0.1$
+
+## 7.
