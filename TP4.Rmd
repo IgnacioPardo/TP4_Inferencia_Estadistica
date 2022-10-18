@@ -1,0 +1,73 @@
+---
+title: "TP4"
+author: "Luca Mazzarello"
+date: '2022-10-05'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Consigna 1
+
+a)  $\mu$: concentración **media** arsenico (ppb) en pollos del proveedor A
+
+b)  $H_0: \mu = 80$ versus $H_1: \mu > 80$
+
+c)  $X_i$: concentración de arsénico (ppb) del $i-esimo$ pollo de la muestra, $1 \leq i \leq n$. Sabemos que $X_i$ son variables aleatorias i.i.d de distribución $\mathcal {N}(\mu,16)$. Consideramos una muestra aleatoria $X_1, \ldots,X_n \sim \mathcal {N}(\mu,16)$.
+
+d)  Nivel $\alpha=0.1$
+
+e)  $T = \frac{\overline{X}_n - 80 }{\sqrt{\frac{16}{n}}}$ y **bajo** $H_0$ sabemos que $T\sim \mathcal {N}(0,1)$
+
+f)  $\mathcal {R}$ = {$\mathcal {T > z_{\alpha}}= 1.281552$}
+
+## Consigna 2
+
+a)  
+
+```{r}
+set.seed(44512364) 
+concentraciones = c(rnorm(5,80,4))
+(mean(concentraciones) - 80)/sqrt(16/5)
+```
+
+b)  Segun el test planteado en el ejercicio 1, no rechazariamos $H_0$ dado que el valor es menor a $1.281552$
+
+c)  Dado el contexto, no puedo asegurarme de que puedo aceptar $H_0$ si no que la informacion conseguida no es suficiente como para rechazar la hipotesis nula. Es decir, no rechazo $H_0$
+
+d)  No
+
+## Consigna 3
+
+```{r}
+estadistico = function(a){
+  (mean(a)-80)/sqrt(16/length(a))
+}
+
+estadistico(concentraciones)
+```
+
+## Consigna 4
+
+```{r}
+Nrep = 10000
+muchos_estadisticos = replicate(Nrep,estadistico(rnorm(5,80,4)))
+mean(mean(muchos_estadisticos > 1.281552))
+```
+
+A partir de los resultados podemos decir que en el diez porciento de las veces rechazo $H_0$ ya que solo el noventa porciento de las muestras satisface la hipotesis nula, es decir, $T > z_{0.1004} = 1.281552$
+
+## Consigna 5
+
+```{r}
+hist(muchos_estadisticos,probability = TRUE)
+curve(dnorm(x, mean=0, sd=1), 
+      col="darkblue", add=TRUE)
+```
+a)  Podemos observar que el promedio se concentra en 0 (coincide con el hecho de tener una distribucion $N(0,1)$)
+
+b) Es de esperarse por el Teorema Central del Limite ya que trabajamos con un valor de "n" grande.
+
+## Consigna 6
