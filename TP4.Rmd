@@ -1,5 +1,5 @@
 ---
-title: "TP4_Pardo_Mazzarello"
+title: "Trabajo Práctico 4"
 author: "Ignacio Pardo & Luca Mazzarello"
 date: "`r Sys.Date()`"
 output: pdf_document
@@ -28,7 +28,7 @@ n = 5
 set.seed(44512364) 
 concentraciones = rnorm(5,80,4)
 (mean(concentraciones) - 80) / sqrt(16/n)
-(mean(concentraciones) - 80) / sqrt(16/n) < 1.281552
+(mean(concentraciones) - 80) / sqrt(16/n) < qnorm(0.9)
 ```
 
 b)  Segun el test planteado en el ejercicio 1, no rechazariamos $H_0$ dado que el valor es menor a $1.281552$
@@ -52,7 +52,7 @@ estadistico(concentraciones)
 ```{r}
 Nrep = 10000
 muchos_estadisticos = replicate(Nrep,estadistico(rnorm(5,80,4)))
-mean(muchos_estadisticos > 1.281552)
+mean(muchos_estadisticos > qnorm(0.9))
 ```
 
 A partir de los resultados podemos decir que en el diez porciento de las veces rechazo $H_0$ ya que solo el noventa porciento de las muestras satisface la hipotesis nula, es decir, $T > z_{0.1004} = 1.281552$
@@ -60,9 +60,9 @@ A partir de los resultados podemos decir que en el diez porciento de las veces r
 ## 5.
 
 ```{r}
-hist(muchos_estadisticos,probability = TRUE)
+hist(muchos_estadisticos,probability = TRUE, col="darkmagenta")
 curve(dnorm(x, mean=0, sd=1), 
-      col="darkblue", add=TRUE)
+      col="violet", add=TRUE, lwd=5)
 ```
 
 a)  Podemos observar que el promedio se concentra en 0 (coincide con el hecho de tener una distribucion $N(0,1)$)
@@ -74,9 +74,93 @@ b)  Es de esperarse por el Teorema Central del Limite ya que trabajamos con un v
 El valor se debería aproximar al nivel $alpha = 0.1$
 
 ```{r}
-mean(muchos_estadisticos > 1.281552)
+mean(muchos_estadisticos > qnorm(0.9))
 ```
+a) La proporción de muestras generadas en el ejercicio 4) para las cuales se rechazaría $H_0$ en base al test propuesto en el ejercicio 1) deberia acercarce al nivel propuesto $\alpha$, ya que asumimos $H_{0}$ como verdadera cuando generamos muchos_estadisticos, y estamos ahora calculando la proporcion de estadisticos con los que rechazamos $H_{0}$.
 
-Efectivamente el valor obtenido aproxima $0.1$
+b) Efectivamente el valor obtenido aproxima $0.1$
 
 ## 7.
+
+```{r}
+Nrep = 10000
+muchos_estadisticos2 <- replicate(Nrep,estadistico(rnorm(5,84,4)))
+sum(muchos_estadisticos2 > qnorm(0.9))
+```
+
+## 8.
+
+```{r}
+hist(muchos_estadisticos2, probability = TRUE, main = "Histograma de densidad  con Normal (0, 1) superpuesta", col="darkmagenta")
+curve(dnorm(x,0,1), add=TRUE, lwd=5, col="violet")
+```
+
+a)  Se observa que muchos_estadisticos2 tiene forma de una distribucion normal, pero con media corrida para la derecha.
+
+b)  Como la funcion `estadistico` estandariza la distribución con una media de 80, pero la distribución original fue generada con una media de 84.
+
+c)  
+
+```{r}
+hist(muchos_estadisticos2, probability = TRUE, main = "Histograma de densidad con Normal superpuesta", col="darkmagenta")
+curve(dnorm(x,4/sqrt(16/5),1), add=TRUE, lwd=5, col="violet")
+```
+
+Por propiedades de la esperanza y de la varianza:
+
+$$ {\overline{X}_5} \sim N(84; 16/5 ) \\
+{\overline{X}_5}-80 \sim N(84-80; 16/5) \\
+{\overline{X}_5}-80 \sim N(4; 16/5) \\
+\frac {\overline{X}_{n} -80}{\sqrt{16/n}} \sim N(\frac{4}{\sqrt{16/5}}, 1) \\
+T = \frac {\overline{X}_{n} -80}{\sqrt{16/n}} \sim N(\frac{4}{\sqrt{16/5}} ,1)$$
+
+## 9.
+
+```{r}
+mean(muchos_estadisticos2 < qnorm(0.9))
+```
+
+## 10.
+
+a)  $\operatorname{H_{1}} = \mu > 80$ , la región de rechazo $R = \{\operatorname{T} > z_{\alpha}\}$ con $z_{0,05} = 1,644854$
+
+```{r}
+nivel = 0.05
+qnorm(1 - nivel)
+```
+
+
+
+b)
+
+```{r}
+mean(muchos_estadisticos2 < qnorm(0.95))
+```
+
+c) En este caso la región de rechazo va a ser más grande, debido que tratamos con un nivel mas bajo, y, como consecuencia, la proporción de muestras que no rechacen $H_{0}$ va a ser mayor en el ejercicio 7 que en el ejercicio 9.
+
+## 11.
+a)
+```{r}
+valores = c(81.12, 82.87, 82.08, 81.19, 78.31, 82.26, 87.85)
+
+estadistico_valores = estadistico(valores)
+p_valor = 1 - pnorm(estadistico_valores, 0, 1)
+
+estadistico_valores 
+p_valor
+```
+b) 
+
+Cuando el nivel es $0.05$ no rechazamos $H_{0}$ porque el $p_valor = 0.06922062$ no es menor al nivel.
+
+Pero cuando el nivel es $0.1$, si rechazamos $H_{0}$ porque el $p_valor = 0.06922062$ es menor al nivel.
+
+c)
+
+```{r}
+Nrep = 10000
+mean(replicate(Nrep, estadistico(rnorm(7,80,4))) > estadistico_valores)
+```
+
+El p-valor se aproxima al valor obtenido.
