@@ -26,7 +26,7 @@ a)
 ```{r}
 n = 5
 set.seed(44512364) 
-concentraciones = rnorm(5,80,4)
+concentraciones = rnorm(5, 80, 4)
 (mean(concentraciones) - 80) / sqrt(16/n)
 (mean(concentraciones) - 80) / sqrt(16/n) < qnorm(0.9)
 ```
@@ -41,7 +41,7 @@ d)  No se cancela la relación con el proovedor.
 
 ```{r}
 estadistico = function(a){
-  (mean(a)-80)/sqrt(16/length(a))
+  (mean(a)-80) / sqrt(16/length(a))
 }
 
 estadistico(concentraciones)
@@ -51,7 +51,7 @@ estadistico(concentraciones)
 
 ```{r}
 Nrep = 10000
-muchos_estadisticos = replicate(Nrep,estadistico(rnorm(5,80,4)))
+muchos_estadisticos = replicate(Nrep,estadistico(rnorm(5, 80, 4)))
 mean(muchos_estadisticos > qnorm(0.9))
 ```
 
@@ -60,9 +60,14 @@ A partir de los resultados podemos decir que en el diez porciento de las veces r
 ## 5.
 
 ```{r}
-hist(muchos_estadisticos,probability = TRUE, col="darkmagenta")
-curve(dnorm(x, mean=0, sd=1), 
-      col="violet", add=TRUE, lwd=5)
+hist(muchos_estadisticos,
+     probability = TRUE, 
+     col="darkmagenta")
+
+curve(dnorm(x, 0, 1), 
+      col="violet", 
+      add=TRUE, 
+      lwd=5)
 ```
 
 a)  Podemos observar que el promedio se concentra en 0 (coincide con el hecho de tener una distribucion $N(0,1)$)
@@ -84,15 +89,23 @@ b) Efectivamente el valor obtenido aproxima $0.1$
 
 ```{r}
 Nrep = 10000
-muchos_estadisticos2 <- replicate(Nrep,estadistico(rnorm(5,84,4)))
+muchos_estadisticos2 <- replicate(Nrep, estadistico(rnorm(5, 84, 4)))
+
 sum(muchos_estadisticos2 > qnorm(0.9))
 ```
 
 ## 8.
 
 ```{r}
-hist(muchos_estadisticos2, probability = TRUE, main = "Histograma de densidad  con Normal (0, 1) superpuesta", col="darkmagenta")
-curve(dnorm(x,0,1), add=TRUE, lwd=5, col="violet")
+hist(muchos_estadisticos2, 
+     probability = TRUE, 
+     main = "Histograma de densidad  con Normal (0, 1) superpuesta", 
+     col="darkmagenta")
+
+curve(dnorm(x, 0, 1), 
+      add=TRUE, 
+      lwd=5, 
+      col="violet")
 ```
 
 a)  Se observa que muchos_estadisticos2 tiene forma de una distribucion normal, pero con media corrida para la derecha.
@@ -102,17 +115,21 @@ b)  Como la funcion `estadistico` estandariza la distribución con una media de 
 c)  
 
 ```{r}
-hist(muchos_estadisticos2, probability = TRUE, main = "Histograma de densidad con Normal superpuesta", col="darkmagenta")
-curve(dnorm(x,4/sqrt(16/5),1), add=TRUE, lwd=5, col="violet")
+hist(muchos_estadisticos2, 
+     probability = TRUE, 
+     main = "Histograma de densidad con Normal superpuesta", 
+     col="darkmagenta")
+
+curve(dnorm(x, 4 / sqrt(16/5) ,1), 
+      add=TRUE, 
+      lwd=5, 
+      col="violet")
 ```
 
-Por propiedades de la esperanza y de la varianza:
-
-$$ {\overline{X}_5} \sim N(84; 16/5 ) \\
-{\overline{X}_5}-80 \sim N(84-80; 16/5) \\
-{\overline{X}_5}-80 \sim N(4; 16/5) \\
-\frac {\overline{X}_{n} -80}{\sqrt{16/n}} \sim N(\frac{4}{\sqrt{16/5}}, 1) \\
-T = \frac {\overline{X}_{n} -80}{\sqrt{16/n}} \sim N(\frac{4}{\sqrt{16/5}} ,1)$$
+$$ {\overline{X}_5} \sim N(84, 16/5 ) \\
+{\overline{X}_5}-80 \sim N(84-80, 16/5) \\
+{\overline{X}_5}-80 \sim N(4, 16/5) \\
+\frac {\overline{X}_{n} -80}{\sqrt{16/n}} \sim N(\frac{4}{\sqrt{16/5}}, 1)$$
 
 ## 9.
 
@@ -152,15 +169,13 @@ p_valor
 ```
 b) 
 
-Cuando el nivel es $0.05$ no rechazamos $H_{0}$ porque el $p_valor = 0.06922062$ no es menor al nivel.
-
-Pero cuando el nivel es $0.1$, si rechazamos $H_{0}$ porque el $p_valor = 0.06922062$ es menor al nivel.
+Cuando el nivel es $0.05$ no rechazamos $H_{0}$ porque el $\operatorname{p-valor} = 0.06922062$ no es menor al nivel. Pero cuando el nivel es $0.1$, si rechazamos $H_{0}$ porque el $\operatorname{p-valor} = 0.06922062$ es menor al nivel.
 
 c)
 
 ```{r}
 Nrep = 10000
-mean(replicate(Nrep, estadistico(rnorm(7,80,4))) > estadistico_valores)
+mean(replicate(Nrep, estadistico(rnorm(7, 80, 4))) > estadistico_valores)
 ```
 
 El p-valor se aproxima al valor obtenido.
